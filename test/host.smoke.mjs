@@ -82,7 +82,7 @@ function mb(bytes) {
 
 // Bound resolution: real shape, absent route, absent service, throwing service.
 const fakeSettings = (bound) => ({
-  get: (ns) => ns === 'llm-pi-ai' ? { providers: { example-relay: { maxRequestImageBytes: bound } } } : undefined,
+  get: (ns) => ns === 'llm-pi-ai' ? { providers: { 'example-relay': { maxRequestImageBytes: bound } } } : undefined,
 })
 check('读到路由上限', resolveImageBound(fakeSettings(2_500_000), 'example-relay') === 2_500_000)
 check('未配置该路由时返回 undefined', resolveImageBound(fakeSettings(2_500_000), 'other') === undefined)
@@ -303,6 +303,40 @@ check('自述路由：超大错误串被截断', await (async () => {
   const again = JSON.parse((await driveRoute(routes[2], '/api/image-governor/report'))[1].raw)
   return again.report?.error?.length === 400
 })())
+
+// A boot-time activation can run before `commands` or `webServer` exists. The
+// plugin must wait for the service through ctx.inject instead of dropping that
+// surface for the whole process, which is what leaves an installed plugin with
+// no command and no HTTP route.
+const deferred = []
+apply({
+  logger: silent,
+  effect(fn) { fn() },
+  get: () => undefined,
+  inject(deps, callback) { deferred.push({ deps, callback }) },
+})
+check('服务都没就绪时不注册、只挂起等待', deferred.length === 2
+  && deferred.map(entry => entry.deps.join(',')).join('|') === 'commands|webServer',
+  JSON.stringify(deferred.map(entry => entry.deps)))
+
+const lateRegistrations = []
+const lateRoutes = []
+const lateScope = {
+  logger: silent,
+  effect(fn) { fn() },
+  get: (service) => service === 'commands'
+    ? { register(definition) { lateRegistrations.push(definition); return () => {} } }
+    : service === 'webServer'
+      ? { register(route) { lateRoutes.push(route); return () => {} } }
+      : undefined,
+}
+for (const entry of deferred) entry.callback(lateScope)
+check('服务就绪后补注册 /images 命令',
+  lateRegistrations.map(definition => definition.name).join(',') === 'images',
+  lateRegistrations.map(definition => definition.name).join(','))
+check('服务就绪后补注册五条路由',
+  lateRoutes.length === 5 && lateRoutes[0].path === '/api/image-governor/inventory',
+  String(lateRoutes.length))
 
 console.log(failures === 0 ? '全部通过' : `${failures} 项失败`)
 process.exit(failures === 0 ? 0 : 1)

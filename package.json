@@ -1,6 +1,6 @@
 {
   "name": "dsh-image-governor",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Session image payload governor for DeepSeek Harness: audit which images a session still ships, pick the ones to keep, and move the rest out of the model context.",
   "type": "module",
   "main": "./lib/index.js",
