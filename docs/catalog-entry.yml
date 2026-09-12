@@ -1,0 +1,8 @@
+# Entry for the DSH plugin catalog (awesome-dsh-plugin/awesome-dsh-plugin).
+# File name in that repository: data/plugins/2432450223__dsh-image-governor.yml
+url: https://github.com/2432450223/dsh-image-governor
+name: 2432450223/dsh-image-governor
+category: session
+description:
+  en: 'Audits the images a session still ships and moves the ones you pick out of the model context through undoable surface replacements.'
+  zh: 盘点会话仍在重发的图片，把选中的那些以可撤销的位置替换移出模型上下文。
