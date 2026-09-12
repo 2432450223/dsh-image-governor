@@ -82,17 +82,17 @@ function mb(bytes) {
 
 // Bound resolution: real shape, absent route, absent service, throwing service.
 const fakeSettings = (bound) => ({
-  get: (ns) => ns === 'llm-pi-ai' ? { providers: { huaapip: { maxRequestImageBytes: bound } } } : undefined,
+  get: (ns) => ns === 'llm-pi-ai' ? { providers: { example-relay: { maxRequestImageBytes: bound } } } : undefined,
 })
-check('读到路由上限', resolveImageBound(fakeSettings(2_500_000), 'huaapip') === 2_500_000)
+check('读到路由上限', resolveImageBound(fakeSettings(2_500_000), 'example-relay') === 2_500_000)
 check('未配置该路由时返回 undefined', resolveImageBound(fakeSettings(2_500_000), 'other') === undefined)
-check('服务缺失时返回 undefined', resolveImageBound(undefined, 'huaapip') === undefined)
+check('服务缺失时返回 undefined', resolveImageBound(undefined, 'example-relay') === undefined)
 check('设置面抛错时返回 undefined',
-  resolveImageBound({ get() { throw new Error('settings unavailable') } }, 'huaapip') === undefined)
-check('非正数上限被忽略', resolveImageBound(fakeSettings(0), 'huaapip') === undefined)
+  resolveImageBound({ get() { throw new Error('settings unavailable') } }, 'example-relay') === undefined)
+check('非正数上限被忽略', resolveImageBound(fakeSettings(0), 'example-relay') === undefined)
 check('读不到路由头时返回 undefined',
   routedProvider({ requestHeader() { throw new Error('no header') } }) === undefined)
-check('能从会话头取到路由', routedProvider({ requestHeader: () => ({ config: { provider: 'huaapip' } }) }) === 'huaapip')
+check('能从会话头取到路由', routedProvider({ requestHeader: () => ({ config: { provider: 'example-relay' } }) }) === 'example-relay')
 
 // Mixed nesting shapes: tool results wrap blocks under content[0].content.
 const mixed = {
@@ -142,7 +142,7 @@ check('命令已注册为 /images', registered !== null && typeof registered.han
 if (registered !== null) {
   const statusWithBound = await registered.handler({
     rawInput: 'status',
-    agent: { session: { ...session, requestHeader: () => ({ config: { provider: 'huaapip' } }) } },
+    agent: { session: { ...session, requestHeader: () => ({ config: { provider: 'example-relay' } }) } },
   })
   const answer = await registered.handler({ rawInput: 'status', agent: { session } })
   const clearAnswer = await registered.handler({ rawInput: 'clear', agent: { session } })
@@ -168,7 +168,7 @@ if (registered !== null) {
   })
   const capped = await second.handler({
     rawInput: 'status',
-    agent: { session: { ...session, requestHeader: () => ({ config: { provider: 'huaapip' } }) } },
+    agent: { session: { ...session, requestHeader: () => ({ config: { provider: 'example-relay' } }) } },
   })
   check('报告含实际上线与降级数',
     capped.text.includes('实际每步发送') && capped.text.includes('上限 2.38 MB'),

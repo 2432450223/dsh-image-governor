@@ -14,7 +14,7 @@
     "lib/client.js",
     "cordis.patch.yml",
     "README.md",
-    "test/run.mjs"
+    "test/"
   ],
   "license": "MIT",
   "engines": {

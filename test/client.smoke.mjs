@@ -22,7 +22,7 @@ const settle = () => new Promise(resolve => setTimeout(resolve, 0))
 // ---- host stub: answers the three endpoints the picker uses ----
 const fetched = []
 const postBodies = []
-const SESSION = 'session-test'
+const SESSION = 'demo-session'
 const SESSIONS = [{ sessionId: SESSION, title: '电商套图', images: 3, historyBytes: 1_700_000, offloadedImages: 2, shippedBase64Bytes: 666_667 }]
 const IMAGES = [
   { seq: 11, type: 'tool/result', turn: 2, step: 5, name: 'ref.png', attachmentId: 'sha256:a', mediaType: 'image/png', bytes: 900_000, base64Bytes: 1_200_000, shipped: false },
@@ -30,7 +30,7 @@ const IMAGES = [
   { seq: 33, type: 'tool/result', turn: 9, step: 4, name: 'new.png', attachmentId: 'sha256:c', mediaType: 'image/png', bytes: 500_000, base64Bytes: 666_667, shipped: true },
 ]
 const inventory = {
-  ok: true, sessionId: SESSION, provider: 'huaapip', capBytes: 2_500_000, surfaceNodes: 40,
+  ok: true, sessionId: SESSION, provider: 'example-relay', capBytes: 2_500_000, surfaceNodes: 40,
   historyBytes: 1_700_000, historyBase64Bytes: 2_266_667, shippedBase64Bytes: 666_667,
   offloadedImages: 2, placeholders: 0, images: IMAGES,
 }
