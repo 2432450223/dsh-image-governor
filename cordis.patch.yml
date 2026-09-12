@@ -1,0 +1,5 @@
+# dsh-image-governor bundle patch: 插入图片治理插件行。
+# 安装：dsh plugin --profile web add <本目录或 tgz>
+- insert:
+    - id: image-governor
+      name: dsh-image-governor

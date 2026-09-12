@@ -1,0 +1,31 @@
+{
+  "name": "dsh-image-governor",
+  "version": "0.6.0",
+  "description": "会话图片载荷治理：/images status 盘点模型可见历史里还在重发的图片，设置卡显示插件状态；非致命挂载，加载失败只提示不阻塞启动",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": []
+    }
+  }
+}
