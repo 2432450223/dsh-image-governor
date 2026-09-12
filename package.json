@@ -1,7 +1,7 @@
 {
   "name": "dsh-image-governor",
   "version": "0.6.0",
-  "description": "会话图片载荷治理：/images status 盘点模型可见历史里还在重发的图片，设置卡显示插件状态；非致命挂载，加载失败只提示不阻塞启动",
+  "description": "Session image payload governor for DeepSeek Harness: audit which images a session still ships, pick the ones to keep, and move the rest out of the model context.",
   "type": "module",
   "main": "./lib/index.js",
   "exports": {
@@ -13,11 +13,13 @@
     "lib/index.js",
     "lib/client.js",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "test/run.mjs"
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "dsh": ">=0.1.1-rc.1"
   },
   "dsh": {
     "bundle": {
@@ -27,5 +29,27 @@
       "platform": "web",
       "inject": []
     }
+  },
+  "keywords": [
+    "deepseek",
+    "harness",
+    "dsh",
+    "dsh-plugin",
+    "session",
+    "context",
+    "image",
+    "token-budget"
+  ],
+  "author": "2432450223",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2432450223/dsh-image-governor.git"
+  },
+  "homepage": "https://github.com/2432450223/dsh-image-governor",
+  "bugs": {
+    "url": "https://github.com/2432450223/dsh-image-governor/issues"
+  },
+  "scripts": {
+    "test": "node test/run.mjs"
   }
 }
